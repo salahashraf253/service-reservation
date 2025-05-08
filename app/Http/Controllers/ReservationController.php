@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -66,5 +67,49 @@ class ReservationController extends Controller
 
         return response()->json(['message' => 'Reservation cancelled successfully']);
     }
+
+    public function confirm(int $id): JsonResponse
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
+        if ($reservation->status === 'confirmed') {
+            return response()->json(['message' => 'Reservation is already confirmed'], 400);
+        }
+
+        if ($reservation->status !== 'pending') {
+            return response()->json(['message' => 'Reservation cannot be confirmed'], 400);
+        }
+
+
+        $reservation->status = 'confirmed';
+        $reservation->save();
+
+        return response()->json(['message' => 'Reservation confirmed successfully']);
+    }
+
+    //endpoint to update reservation time
+    public function updateReservationTime(UpdateReservationRequest $request, int $id): JsonResponse
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $data = $request->validated();
+        if ($reservation->status !== 'pending') {
+            return response()->json(['message' => 'Reservation cannot be updated'], 400);
+        }
+
+        $reservation->reservation_datetime = $data['reservation_datetime'];
+        $reservation->save();
+
+        return new ReservationResource($reservation);
+    }
+    
     
 }

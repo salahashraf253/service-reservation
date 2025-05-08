@@ -24,11 +24,4 @@ class ReservationResource extends JsonResource
             'updated_at' => $this->updated_at,
         ];
     }
-
-    public function with(Request $request): array
-    {
-        return [
-            'message' => 'Reservation created successfully',
-        ];
-    }
 }

@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservations', [ReservationController::class, 'store']);
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::delete('/reservations/{id}', [ReservationController::class, 'cancel']);
+    Route::put('/reservations/confirm/{id}', [ReservationController::class, 'confirm']);
+    Route::put('/reservations/{id}', [ReservationController::class, 'updateReservationTime']);
 
     Route::middleware([IsAdmin::class])->group(function () {
         Route::post('/services', [ServiceController::class, 'store']);
