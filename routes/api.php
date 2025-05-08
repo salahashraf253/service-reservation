@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/services/{id}', [ServiceController::class, 'show']);
 
     Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::get('/reservations', [ReservationController::class, 'index']);
+    Route::delete('/reservations/{id}', [ReservationController::class, 'cancel']);
 
     Route::middleware([IsAdmin::class])->group(function () {
         Route::post('/services', [ServiceController::class, 'store']);
