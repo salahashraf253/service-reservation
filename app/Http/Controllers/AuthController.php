@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\LoginResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,7 @@ class AuthController extends Controller
         ], HttpResponse::HTTP_CREATED);
     }
 
-    public function login(LoginUserRequest $request): JsonResponse
+    public function login(LoginUserRequest $request): LoginResource | JsonResponse
     {
         $userCredentials = $request->validated();
         $user = User::where('email', $userCredentials['email'])->first();
@@ -39,13 +40,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token');
 
-        return response()->json([
-            'data' => [
-                'access_token' => $token->plainTextToken,
-            ],
-            'message' => 'User logged in successfully',
-        ], HttpResponse::HTTP_OK);
+        return new LoginResource([
+            'access_token' => $token->plainTextToken,
+            'is_admin' => $user->is_admin,
+        ]);
     }
+
     public function user(Request $request): JsonResponse
     {
         return response()->json([
