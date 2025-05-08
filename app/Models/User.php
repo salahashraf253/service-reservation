@@ -50,4 +50,10 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
 }
