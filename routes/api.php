@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\AdminReservationController;
 use App\Http\Middleware\IsAdmin;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,5 +28,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/services', [ServiceController::class, 'store']);
         Route::put('/services/{id}', [ServiceController::class, 'update']);
         Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+
+        Route::get('/reservations/all', [AdminReservationController::class, 'list']);
+        Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
+        Route::put('/reservations/status/{id}', [AdminReservationController::class, 'updateStatus']);
+        Route::patch('/reservations/{id}/cancel', [AdminReservationController::class, 'cancel']);
+        Route::get('/reservations/export/csv', [AdminReservationController::class, 'export']); 
     });
 });
