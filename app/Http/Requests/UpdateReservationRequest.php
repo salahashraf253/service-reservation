@@ -25,4 +25,13 @@ class UpdateReservationRequest extends FormRequest
             'reservation_datetime' => 'required|date|after:now',
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'reservation_datetime.required' => 'The reservation date and time is required.',
+            'reservation_datetime.date' => 'The reservation date and time must be a valid date.',
+            'reservation_datetime.after' => 'The reservation date and time must be in the future.',
+        ];
+    }
+
 }
