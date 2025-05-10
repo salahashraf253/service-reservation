@@ -54,10 +54,6 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        if ($reservation->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         if ($reservation->reservation_datetime < Carbon::now()) {
             return response()->json(['message' => 'Cannot cancel past reservations'], 400);
         }
@@ -72,18 +68,11 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        if ($reservation->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        
-        if ($reservation->status === 'confirmed') {
-            return response()->json(['message' => 'Reservation is already confirmed'], 400);
-        }
-
-        if ($reservation->status !== 'pending') {
+    
+        if ($reservation->status !== 'pending') 
+        {
             return response()->json(['message' => 'Reservation cannot be confirmed'], 400);
         }
-
 
         $reservation->status = 'confirmed';
         $reservation->save();
@@ -91,14 +80,9 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Reservation confirmed successfully']);
     }
 
-    //endpoint to update reservation time
-    public function updateReservationTime(UpdateReservationRequest $request, int $id): JsonResponse
+    public function updateReservationTime(UpdateReservationRequest $request, int $id): ReservationResource | JsonResponse
     {
         $reservation = Reservation::findOrFail($id);
-
-        if ($reservation->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
 
         $data = $request->validated();
         if ($reservation->status !== 'pending') {
@@ -110,6 +94,4 @@ class ReservationController extends Controller
 
         return new ReservationResource($reservation);
     }
-    
-    
 }
