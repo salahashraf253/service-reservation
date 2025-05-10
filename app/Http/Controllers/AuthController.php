@@ -46,11 +46,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function user(Request $request): JsonResponse
+    public function user(Request $request): UserResource | JsonResponse
     {
-        return response()->json([
-            'data' => new UserResource($request->user())
-        ]);
+        if (!$request->user()) {
+            return response()->json(['error' => 'Unauthorized'], HttpResponse::HTTP_UNAUTHORIZED);
+        }
+        return new UserResource($request->user());
     }
 
     public function logout(Request $request): JsonResponse
