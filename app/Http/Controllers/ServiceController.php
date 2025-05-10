@@ -11,15 +11,18 @@ use Illuminate\Http\JsonResponse;
 
 class ServiceController extends Controller
 {
-    public function index(): ServiceCollection
+    public function index(Request $request): ServiceCollection | JsonResponse
     {
         $services = Service::all();
         return new ServiceCollection($services);
     }
 
-    public function show(int $id): ServiceResource
+    public function show(int $id): ServiceResource | JsonResponse
     {
-        $service = Service::findOrFail($id);
+        $service = Service::find($id);
+        if (!$service) {
+            return response()->json(['error' => 'Service not found'], 404);
+        }
         return new ServiceResource($service);
     }
     
@@ -39,6 +42,10 @@ class ServiceController extends Controller
 
     public function destroy(int $id): JsonResponse
     {
+        $service = Service::find($id);
+        if (!$service) {
+            return response()->json(['error' => 'Service not found'], 404);
+        }
         Service::destroy($id);
         return response()->json(['message' => 'Service deleted']);
     }
