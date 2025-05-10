@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 
 class EnsureUserOwnsReservation
 {
