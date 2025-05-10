@@ -115,7 +115,7 @@ class ReservationControllerTest extends TestCase
             'reservation_datetime' => $newTime,
         ])
         ->assertStatus(200)
-        ->assertJsonStructure(['data' => ['reservation_datetime']]) // Corrected here
+        ->assertJsonStructure(['data' => ['reservation_datetime']]) 
         ->assertJson(['data' => ['reservation_datetime' => $newTime]]);
 }
 
