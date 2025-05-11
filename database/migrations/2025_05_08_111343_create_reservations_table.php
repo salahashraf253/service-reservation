@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('reservation_datetime');
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->timestamps();
+            $table->unique(['service_id', 'reservation_datetime']);
         });
     }
     
