@@ -11,6 +11,7 @@ use App\Models\User;
 class AuthControllerTest extends TestCase
 {
     Use DatabaseTransactions;
+    
     public function test_user_can_sign_up(): void
     {
         $email = fake()->unique()->safeEmail();
