@@ -11,12 +11,32 @@ use App\Http\Resources\ReservationCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
+use App\Models\Service;
 
 class ReservationController extends Controller
 {
-    public function store(StoreReservationRequest $request): ReservationResource
+    public function store(StoreReservationRequest $request): ReservationResource|JsonResponse
     {
         $data = $request->validated();
+
+        $service = Service::find($data['service_id']);
+
+        if (!$service || !$service->available) {
+            return response()->json([
+                'message' => 'The selected service is not available.'
+            ], 400);
+        }
+
+        $exists = Reservation::where('service_id', $data['service_id'])
+            ->where('reservation_datetime', $data['reservation_datetime'])
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'This service is already reserved at the selected time.'
+            ], 400);
+        }
 
         $reservation = Reservation::create([
             'user_id' => Auth::id(),
@@ -27,6 +47,7 @@ class ReservationController extends Controller
 
         return new ReservationResource($reservation);
     }
+
 
     public function index(Request $request): JsonResponse
     {
@@ -85,8 +106,19 @@ class ReservationController extends Controller
         $reservation = Reservation::findOrFail($id);
 
         $data = $request->validated();
+
         if ($reservation->status !== 'pending') {
             return response()->json(['message' => 'Reservation cannot be updated'], 400);
+        }
+
+        $conflict = Reservation::where('service_id', $reservation->service_id)
+            ->where('reservation_datetime', $data['reservation_datetime'])
+            ->where('id', '!=', $reservation->id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+
+        if ($conflict) {
+            return response()->json(['message' => 'This time slot is already reserved'], 400);
         }
 
         $reservation->reservation_datetime = $data['reservation_datetime'];
@@ -94,4 +126,5 @@ class ReservationController extends Controller
 
         return new ReservationResource($reservation);
     }
+
 }
