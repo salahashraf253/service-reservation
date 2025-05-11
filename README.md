@@ -4,7 +4,7 @@
 This is a RESTful API for a Service Reservation System, built using Laravel. It allows users to register, browse services (consultations, coaching, etc.), and reserve them online. Admins can manage services and reservations.
 
 ## Entity Relationship Diagram (ERD)
-ERD
+![ERD](https://github.com/salahashraf253/service-reservation/blob/master/Erd.png)
 
 ## Features
 - JWT Authentication using Laravel Sanctum
