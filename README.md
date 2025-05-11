@@ -98,10 +98,9 @@ php artisan serve
 ```
 Authorization: Bearer your-token
 ```
+## Buiness Requirements
+<p> The system must allow users to browse and reserve services like consultations or repairs.
+Admins should manage services and monitor all reservations with full control.</p>
 
 ## Future Enhancements
-- Integrate login with third-party like Google and Facebook
-- Integrate with payment gateway to handle paid reservations
-- Add pagination and filters to service list 
-- Implement email notifications for reservation confirmations and updates
-- Build a dashboard for service providers to manage their own services
+Integrate with payment gateway to handle paid reservations to build trust throught secure, seamless transactions, help the buiness generate real-time revenue and automate finanical tracking
