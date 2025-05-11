@@ -34,10 +34,10 @@ GET   |  ```/api/user/``` | Get authenticated user info|
 GET | ```/api/services``` | List all services | Public for User & Admin |
 GET | ```/api/services/{id}``` | Get details of a single service | Public for User & Admin |
 POST | ```/api/servies``` | Add a new service | Admin only | 
-PUT | ```/api/services/{id{``` | Update an existing service | Admin only | 
+PUT | ```/api/services/{id}``` | Update an existing service | Admin only | 
 DELETE | ```api/services/{id}``` | Delete a service | Admin only |
 
-### Services API
+### Reservations API
 
 | HTTP Verbs | Endpoint | Action | 
 | --- | --- | --- | 
