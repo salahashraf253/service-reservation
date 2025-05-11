@@ -70,7 +70,7 @@ GET | ```/api/reservations/export/csv``` | Export all reservations to CSV|
 ## Setup Instructions
 1. Clone the repository:
    ```
-   git clone
+   git clone https://github.com/salahashraf253/service-reservation
    cd service-reservation
    ```
 2. Install dependencies:
