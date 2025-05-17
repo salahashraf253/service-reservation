@@ -15,7 +15,7 @@ class AdminReservationController extends Controller
 {
     public function list(Request $request): ReservationCollection
     {
-        $query = Reservation::query();
+        $query = Reservation::with('user', 'service');
 
         if ($request->has('status')) {
             $query->where('status', $request->status);
