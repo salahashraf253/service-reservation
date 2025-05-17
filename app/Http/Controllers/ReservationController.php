@@ -55,12 +55,14 @@ class ReservationController extends Controller
 
         $userId = Auth::id();
 
-        $pastReservations = Reservation::where('user_id', $userId)
+        $pastReservations = Reservation::with('service')
+            ->where('user_id', $userId)
             ->where('reservation_datetime', '<', $now)
             ->orderBy('reservation_datetime', 'desc')
             ->get();
 
-        $upcomingReservations = Reservation::where('user_id', $userId)
+        $upcomingReservations = Reservation::with('service')
+            ->where('user_id', $userId)
             ->where('reservation_datetime', '>=', $now)
             ->orderBy('reservation_datetime', 'asc')
             ->get();
